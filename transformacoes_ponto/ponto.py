@@ -17,6 +17,9 @@ class Point:
         self.x = x
         self.y = y
 
+    def __iter__(self):
+        return iter((self.x, self.y))
+
     def translacao(self, tx, ty):
         matriz_transformacao = numpy.matrix([[1, 0, tx], [0, 1, ty], [0, 0, 1]])
         matriz_homogenea = numpy.matrix([[self.x], [self.y], [1]])
@@ -49,7 +52,7 @@ class Point:
         return Point(resultado[0, 0], resultado[1, 0])
 
     def reflexao_y(self):
-        matriz_de_transformacao = numpy.matrix([[1, 0, 0], [-1, 0, 0], [0, 0, 1]])
+        matriz_de_transformacao = numpy.matrix([[-1, 0, 0], [0, 1, 0], [0, 0, 1]])
         matriz_homogenea = numpy.matrix([[self.x], [self.y], [1]])
         resultado = numpy.matmul(matriz_de_transformacao, matriz_homogenea)
         return Point(resultado[0, 0], resultado[1, 0])
