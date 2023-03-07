@@ -20,8 +20,17 @@ class Point:
     def __iter__(self):
         return iter((self.x, self.y))
 
+    @staticmethod
+    def __calcula_matriz_translacao(tx, ty):
+        return numpy.matrix([[1, 0, tx], [0, 1, ty], [0, 0, 1]])
+
+    @staticmethod
+    def __calcula_matriz_rotacao(angulo):
+        return numpy.matrix(
+            [[numpy.cos(angulo), -numpy.sin(angulo), 0], [numpy.sin(angulo), numpy.cos(angulo), 0], [0, 0, 1]])
+
     def translacao(self, tx, ty):
-        matriz_transformacao = numpy.matrix([[1, 0, tx], [0, 1, ty], [0, 0, 1]])
+        matriz_transformacao = self.__calcula_matriz_translacao(tx, ty)
         print(f'Matriz de transformacao <translacao>\n{matriz_transformacao}')
         matriz_homogenea = numpy.matrix([[self.x], [self.y], [1]])
         resultado = numpy.matmul(matriz_transformacao, matriz_homogenea)
@@ -36,8 +45,7 @@ class Point:
 
     def rotacao(self, angulo_graus):
         angulo = angulo_graus * numpy.pi / 180
-        matriz_transformacao = numpy.matrix(
-            [[numpy.cos(angulo), -numpy.sin(angulo), 0], [numpy.sin(angulo), numpy.cos(angulo), 0], [0, 0, 1]])
+        matriz_transformacao = self.__calcula_matriz_rotacao(angulo)
         print(f'Matriz de transformacao <rotacao>\n{matriz_transformacao}')
         matriz_homogenea = numpy.matrix([[self.x], [self.y], [1]])
         resultado = numpy.matmul(matriz_transformacao, matriz_homogenea)
@@ -78,8 +86,22 @@ class Point:
         resultado = numpy.matmul(matriz_de_transformacao, matriz_homogenea)
         return Point(resultado[0, 0], resultado[1, 0])
 
-    def rotacao_ponto(self, x, y, angulo):
-        return self.translacao(-x, -y).rotacao(angulo).translacao(x, y)
+    def rotacao_ponto(self, x, y, angulo_graus):
+        angulo = angulo_graus * numpy.pi / 180
+        cos = numpy.cos(angulo)
+        sin = numpy.sin(angulo)
+        matriz_de_transformacao = numpy.matrix(
+            [[cos, -sin, (x - x * cos) + (y * sin)],
+             [sin, cos, (y - y * cos) - (x * sin)],
+             [0, 0, 1]])
+        print(f'Matriz de transformacao <rotacao ponto>\n{matriz_de_transformacao}')
+        matriz_homogenea = numpy.matrix([[self.x], [self.y], [1]])
+        resultado = numpy.matmul(matriz_de_transformacao, matriz_homogenea)
+        return Point(resultado[0, 0], resultado[1, 0])
 
     def escala_ponto(self, x, y, sx, sy):
-        return self.translacao(-x, -y).escala(sx, sy).translacao(x, y)
+        matriz_de_transformacao = numpy.matrix([[sx, 0, x - x * sx], [0, sy, y - y * sy], [0, 0, 1]])
+        print(f'Matriz de transformacao <escala ponto>\n{matriz_de_transformacao}')
+        matriz_homogenea = numpy.matrix([[self.x], [self.y], [1]])
+        resultado = numpy.matmul(matriz_de_transformacao, matriz_homogenea)
+        return Point(resultado[0, 0], resultado[1, 0])

@@ -10,8 +10,9 @@ if __name__ == '__main__':
 
     transformacao = []
     for ponto in pontos:
-        transformacao.append(ponto.rotacao_ponto(4, 5, 45))
-        print(ponto.rotacao_ponto(4, 5, 45).x, ponto.rotacao_ponto(4, 5, 45).y)
+        a = ponto.rotacao_ponto(4, 5, 45)
+        transformacao.append(a)
+        print(a.x, a.y)
 
     a = [x for x, _ in transformacao]
     b = [y for _, y in transformacao]
