@@ -34,7 +34,8 @@ class Point:
         resultado = numpy.matmul(matriz_transformacao, matriz_homogenea)
         return Point(resultado[0, 0], resultado[1, 0])
 
-    def rotacao(self, angulo):
+    def rotacao(self, angulo_graus):
+        angulo = angulo_graus * numpy.pi / 180
         matriz_transformacao = numpy.matrix(
             [[numpy.cos(angulo), -numpy.sin(angulo), 0], [numpy.sin(angulo), numpy.cos(angulo), 0], [0, 0, 1]])
         print(f'Matriz de transformacao <rotacao>\n{matriz_transformacao}')
