@@ -20,5 +20,5 @@ def dda(x1, y1, x2, y2, log=0):
 
 
 if __name__ == '__main__':
-    dda(2, 2, 7, 6)
+    dda(2, 2, 7, 6, 1)
     plt.show()
