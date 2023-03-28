@@ -1,0 +1,1 @@
+/usr/sbin/c++ -rdynamic CMakeFiles/testas.dir/main.cpp.o -o testas  -lGL -lGLU 
