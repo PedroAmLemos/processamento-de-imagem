@@ -1,66 +1,165 @@
-//
-//  main.cpp
-//  opengl_aula1
-//
-//  Created by Gilberto Fernandes Junior on 27/03/23.
-//
 #include <GL/glut.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
 
-void myInit(void);
-void myDisplay(void);
-void keyboard(unsigned char key, int x, int y);
+#include <iostream>
 
-int main(int argc, char** argv){
-    glutInit(&argc, argv); // Inicializa o GLUT e processa qualquer parâmetro passado pela linha de comandos. Deve ser chamada antes de qualquer outra rotina GLUT.
-    glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // Especifica como o vídeo será utilizado, no caso será alocado um buffer e o sistema de cor será RGB.
-    glutInitWindowSize (640, 480); // Especifica as dimensões da janela em pixels.
-    glutInitWindowPosition (100, 100); // Especifica a coordenada superior esquerda da janela. Define a localização da janela dentro da tela
-    glutCreateWindow ("Primeiro programa"); // Cria a janela e devolve um identificador único para a janela. Até que o comando glutMainLoop seja chamado, a janela não será mostrada.
-    myInit(); // Rotina que implementa as configurações iniciais do programa.
-    glutDisplayFunc(myDisplay); // Chamada para a função de desenho
-        // Toda vez que o GLUT determinar que a janela tem de ser desenhada, ele chamará a função aqui determinada.
-    glutKeyboardFunc(keyboard); // Determinam as funções que usaremos para ler o teclado e o mouse respectivamente.
-    glutMainLoop( ); // É o último comando que chamamos. Ele faz com que todas as janelas criadas sejam mostradas. Uma vez que entramos neste loop, só saímos quando o programa se encerra.
-    return 0;
-    
+enum Color { RED, GREEN, BLUE };
+
+Color currentColor = RED;
+
+float pointSize = 1.0;
+
+void drawPoint(GLint x, GLint y) {
+
+  glBegin(GL_POINTS);
+
+  glVertex2i(x, y);
+
+  glEnd();
 }
 
-void myInit(void){
-    
-    glClearColor(1.0,1.0,1.0,0.0);     // cor de fundo branco
-    glColor3f(0.0f, 0.0f, 0.0f);          // Define cor corrente de desenho
-    glPointSize(4.0);             // Define o tamanho do ponto: 4 por 4 pixels
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-                                           // janela com resolução de 640 por 480
-    gluOrtho2D(0.0, 640.0, 0.0, 480.0);
+void setDrawingColor(Color color) {
+
+  switch (color) {
+
+  case RED:
+
+    glColor3f(1.0, 0.0, 0.0);
+
+    break;
+
+  case GREEN:
+
+    glColor3f(0.0, 1.0, 0.0);
+
+    break;
+
+  case BLUE:
+
+    glColor3f(0.0, 0.0, 1.0);
+
+    break;
+  }
 }
 
+void display() {
 
+  glClear(GL_COLOR_BUFFER_BIT);
 
-void myDisplay(void)
-{
-        glClear(GL_COLOR_BUFFER_BIT); // limpa a janela
-        glBegin(GL_POINTS);
-            glVertex2f(100, 50); // desenha 3 pontos
-            glVertex2f(100, 130);
-            glVertex2i(150, 130);
-        glEnd();
-        glFlush(); // Garante a execução de todas as rotinas de desenho
+  glutSwapBuffers();
 }
 
+void init() {
 
-// A rotina a seguir termina o programa com a tecla Esc
-void keyboard(unsigned char key, int x, int y){
-     switch (key) {
-         case 27:
-         exit(0);
-         break;
-     }
+  glClearColor(1.0, 1.0, 1.0, 1.0);
+
+  gluOrtho2D(0.0, 640.0, 0.0, 480.0);
 }
 
+void mouseFunc(int button, int state, int x, int y) {
 
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 
+    setDrawingColor(currentColor);
+
+    glPointSize(pointSize);
+  }
+}
+
+void motionFunc(int x, int y) {
+
+  y = 480 - y;
+
+  drawPoint(x, y);
+
+  glutSwapBuffers();
+}
+
+void menuFunc(int value) {
+
+  if (value >= 0 && value <= 2) {
+
+    currentColor = static_cast<Color>(value);
+
+  } else {
+
+    switch (value) {
+
+    case 3:
+
+      pointSize = 1.0;
+
+      break;
+
+    case 4:
+
+      pointSize = 3.0;
+
+      break;
+
+    case 5:
+
+      pointSize = 5.0;
+
+      break;
+    }
+  }
+}
+
+void keyboardFunc(unsigned char key, int x, int y) {
+
+  if (key == 'd' || key == 'D') {
+
+    display();
+  }
+}
+
+int main(int argc, char **argv) {
+
+  glutInit(&argc, argv);
+
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+
+  glutInitWindowSize(640, 480);
+
+  glutInitWindowPosition(100, 100);
+
+  glutCreateWindow("Drawing Program");
+
+  init();
+
+  glutDisplayFunc(display);
+
+  glutMouseFunc(mouseFunc);
+
+  glutMotionFunc(motionFunc);
+
+  glutKeyboardFunc(keyboardFunc);
+
+  int colorMenu = glutCreateMenu(menuFunc);
+
+  glutAddMenuEntry("Red", RED);
+
+  glutAddMenuEntry("Green", GREEN);
+
+  glutAddMenuEntry("Blue", BLUE);
+
+  int pointSizeMenu = glutCreateMenu(menuFunc);
+
+  glutAddMenuEntry("Small", 3);
+
+  glutAddMenuEntry("Medium", 4);
+
+  glutAddMenuEntry("Large", 5);
+
+  int mainMenu = glutCreateMenu(menuFunc);
+
+  glutAddSubMenu("Color", colorMenu);
+
+  glutAddSubMenu("Point Size", pointSizeMenu);
+
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+  glutMainLoop();
+
+  return 0;
+}
