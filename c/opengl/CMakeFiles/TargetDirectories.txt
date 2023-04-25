@@ -1,3 +1,0 @@
-/home/pedroamlemos/Documents/processamento-de-imagem/c/opengl/CMakeFiles/main.dir
-/home/pedroamlemos/Documents/processamento-de-imagem/c/opengl/CMakeFiles/edit_cache.dir
-/home/pedroamlemos/Documents/processamento-de-imagem/c/opengl/CMakeFiles/rebuild_cache.dir

@@ -1,1 +1,0 @@
-/usr/sbin/c++ -rdynamic CMakeFiles/main.dir/main.cpp.o -o main  -lGL -lGLU -lGLU /usr/lib/libglut.so /usr/lib/libXmu.so /usr/lib/libXi.so 

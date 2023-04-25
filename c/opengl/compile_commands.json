@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/pedroamlemos/Documents/processamento-de-imagem/c/opengl",
-  "command": "/usr/sbin/c++    -o CMakeFiles/main.dir/main.cpp.o -c /home/pedroamlemos/Documents/processamento-de-imagem/c/opengl/main.cpp",
-  "file": "/home/pedroamlemos/Documents/processamento-de-imagem/c/opengl/main.cpp",
-  "output": "CMakeFiles/main.dir/main.cpp.o"
-}
-]
