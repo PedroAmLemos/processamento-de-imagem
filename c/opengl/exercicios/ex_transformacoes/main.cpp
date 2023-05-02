@@ -3,6 +3,7 @@
 float xTrans = 0.0, yTrans = 0.0;
 float scale = 1.0;
 float angle = 0.0;
+float minScale = 0.0001;
 
 void display() {
   glClear(GL_COLOR_BUFFER_BIT);
@@ -26,16 +27,18 @@ void display() {
 void keyboard(unsigned char key, int x, int y) {
   switch (key) {
   case 'w':
-    scale += 0.1;
+    scale += 0.01;
     break;
   case 's':
-    scale -= 0.1;
+    if (scale > minScale) { // Verifique se a escala é maior que o mínimo
+      scale -= 0.01;
+    }
     break;
   case 'a':
-    angle += 5.0;
+    angle += 3.0;
     break;
   case 'd':
-    angle -= 5.0;
+    angle -= 3.0;
     break;
   }
   glutPostRedisplay();
